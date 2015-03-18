@@ -1,0 +1,42 @@
+\documentclass{article}
+
+\begin{document}
+\title{The Ebola Virus Epidemic}
+\author{Obinna Mogbogu\\ Illinois State University\\}
+\date{3/11/2015}
+\maketitle
+
+<<ebolaStatReport, echo=FALSE,warning=FALSE>>=
+#install.packages("rvest", repos="http://cran.us.r-project.org")
+library("rvest")
+
+######I used this to force R from not outputing inline values in Scientific notation#######
+
+###########################################################################################
+
+eVirus <- html("http://en.wikipedia.org/wiki/Ebola_virus_epidemic_in_West_Africa")
+dfEbolaVirus <- html_table(html_nodes(eVirus, "table")[[2]])
+# head(dfEbolaVirus)
+# dfEbolaVirus
+# names(dfEbolaVirus)
+# reportedCountry <- dfEbolaVirus[1:9, "Country"]
+
+#total number of ebola cases
+cases.total <- dfEbolaVirus[10,"Cases"]
+
+
+#total number of ebola deaths
+deaths.total <- dfEbolaVirus[10,"Deaths"]
+
+#US cases
+cases.US <- dfEbolaVirus[6,"Cases"]
+
+#US deaths
+deaths.US <- dfEbolaVirus[6,"Deaths"]
+
+@
+
+The World Health Organization (WHO) and respective governments have reported a total of \(\Sexpr{cases.total}\) suspected cases and \(\Sexpr{deaths.total}\) deaths, though the WHO believes that this substantially understates the magnitude of the outbreak. In the United States there has been \(\Sexpr{cases.US}\) reported cases and \(\Sexpr{deaths.US}\) deaths
+
+
+\end{document}

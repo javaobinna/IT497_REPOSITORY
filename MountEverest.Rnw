@@ -1,0 +1,124 @@
+\documentclass{article}
+
+\begin{document}
+
+\title{People who died while climbing Mount Everest}
+\author{Obinna Mogbogu\\ Illinois State University}
+\date{03/12/2015}
+\maketitle
+
+
+<<deathByMonth, echo=FALSE, warning=FALSE>>=
+library("rvest")
+library(ggplot2)
+
+###########Data computation###################
+MountEve <- html("http://en.wikipedia.org/wiki/List_of_people_who_died_climbing_Mount_Everest")
+dfMountEve <- html_table(html_nodes(MountEve, "table")[[1]], fill=TRUE)
+
+allDeathCase <- dfMountEve[c(1,2)]#Selected only the 1st column NAME, and second column DATE
+
+#JAN
+allDeathJan <- subset(allDeathCase, grepl(".Jan",Date))
+allDeathJanCount <- nrow(allDeathJan)
+#allDeathJanCount
+
+#FEB
+allDeathFeb <- subset(allDeathCase, grepl(".Feb",Date))
+allDeathFebCount <- nrow(allDeathFeb)
+#allDeathFebCount
+
+#MAR
+allDeathMar <- subset(allDeathCase, grepl(".Mar",Date))
+allDeathMarCount <- nrow(allDeathMar)
+#allDeathMarCount
+
+#APR
+allDeathApr <- subset(allDeathCase, grepl(".Apr",Date))
+allDeathAprCount <- nrow(allDeathApr)
+#allDeathAprCount
+
+#MAY
+allDeathMay <- subset(allDeathCase, grepl(".May",Date))
+allDeathMayCount <- nrow(allDeathMay)
+#allDeathMayCount
+
+#JUN
+allDeathJun <- subset(allDeathCase, grepl(".Jun",Date))
+allDeathJunCount <- nrow(allDeathJun)
+#allDeathJunCount
+
+#JUL
+allDeathJul <- subset(allDeathCase, grepl(".Jul",Date))
+allDeathJulCount <- nrow(allDeathJul)
+#allDeathJulCount
+
+#AUG
+allDeathAug <- subset(allDeathCase, grepl(".Aug",Date))
+allDeathAugCount <- nrow(allDeathAug)
+#allDeathAugCount
+
+#SEPT
+allDeathSept <- subset(allDeathCase, grepl(".Sept",Date))
+allDeathSeptCount <- nrow(allDeathSept)
+#allDeathSeptCount
+
+#OCT
+allDeathOct <- subset(allDeathCase, grepl(".Oct",Date))
+allDeathOctCount <- nrow(allDeathOct)
+#allDeathOctCount
+
+#NOV
+allDeathNov <- subset(allDeathCase, grepl(".Nov",Date))
+allDeathNovCount <- nrow(allDeathNov)
+#allDeathNovCount
+
+#DEC
+allDeathDec <- subset(allDeathCase, grepl(".Dec",Date))
+allDeathDecCount <- nrow(allDeathDec)
+#allDeathDecCount
+
+#total number of death check
+totalDeath <- c(allDeathJanCount, allDeathFebCount, allDeathMarCount, allDeathAprCount, allDeathMayCount, allDeathJunCount, allDeathJulCount, allDeathAugCount, allDeathSeptCount, allDeathOctCount, allDeathNovCount, allDeathDecCount)
+count <- sum(totalDeath)
+#count
+
+###########Data computation###################
+
+month <- c("January", "February", "March", "April",  "May",  "June", "July",  "August",  "September", "October", "November", "December")
+
+deathCount <-c(allDeathJanCount, allDeathFebCount, allDeathMarCount, allDeathAprCount, allDeathMayCount, allDeathJunCount, allDeathJulCount, allDeathAugCount, allDeathSeptCount, allDeathOctCount, allDeathNovCount, allDeathDecCount)
+
+
+df <- data.frame(month, deathCount)
+#i have reordered my month because ggplot happens to treat the representation of month in an unexpected way. The code below takes care of the reordering using the factor function. 
+df$month <- factor(df$month, levels=c("January", "February", "March", "April",  "May",  "June", "July",  "August",  "September", "October", "November", "December"))
+
+g <- ggplot(df, aes(x=month, y=deathCount)) + geom_bar(stat="identity")
+g + scale_fill_grey() + ggtitle("Deaths by Months")+ labs(x="Month", y="Number of Death") + coord_flip() + scale_y_continuous(breaks = seq(0, 100, 10))
+
+
+
+
+
+@
+
+\section*{Total Number of Deaths from Climbing Mount Everest}
+The total number of death recorded from climbing Mount Everest for each of the twelve calendar months between 1922 and 2014 is \(\Sexpr{count}\)
+
+\section*{Death Counts by Month}
+January - \(\Sexpr{allDeathJanCount}\) death(s) \\
+February - \(\Sexpr{allDeathFebCount}\) death(s) \\
+March - \(\Sexpr{allDeathMarCount}\) death(s) \\
+April - \(\Sexpr{allDeathAprCount}\) death(s) \\
+May - \(\Sexpr{allDeathMayCount}\) death(s) \\
+June - \(\Sexpr{allDeathJunCount}\) death(s) \\
+July - \(\Sexpr{allDeathJulCount}\) death(s) \\
+August - \(\Sexpr{allDeathAugCount}\) death(s) \\
+September - \(\Sexpr{allDeathSeptCount}\) death(s) \\
+October - \(\Sexpr{allDeathOctCount}\) death(s) \\
+November - \(\Sexpr{allDeathNovCount}\) death(s) \\
+December - \(\Sexpr{allDeathDecCount}\) death(s) \\
+\textbf {TOTAL - \(\Sexpr{count}\) death(s)}
+
+\end{document}
